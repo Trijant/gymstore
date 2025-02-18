@@ -2,6 +2,7 @@ const express=require("express")
 const app=express()
 const router=require("./routes/gymstoreRoutes")
 const fileUpload=require("express-fileupload")
+const cookieParser=require('cookie-parser')
 
 require("dotenv").config()
 const port=process.env.PORT || 4000
@@ -12,6 +13,7 @@ connectDB()
 const cloudinary=require("./config/cloudinary")
 cloudinary.cloudinaryConnect() 
 
+app.use(cookieParser())
 app.use(fileUpload({
     useTempFiles:true,
     tempFileDir:"/temp/"

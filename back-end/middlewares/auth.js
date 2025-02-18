@@ -3,8 +3,10 @@ require("dotenv").config()
 
 exports.auth=(req,res,next)=>{
     try{
-        const token=req.body.token;
+        const token=req.cookies.token;
 
+        console.log(req.body)
+        console.log(req.cookies)
         if(!token){
             res.status(401).json({
                 success:false,
@@ -33,7 +35,7 @@ exports.auth=(req,res,next)=>{
 
 exports.isBuyer=(req,res,next)=>{
     try{
-        if(req.user.role!="Buyer"){
+        if(req.user.role!="buyer"){
             return res.status(401).json({
                 success:false,
                 message:"you are not student"
@@ -50,7 +52,8 @@ exports.isBuyer=(req,res,next)=>{
 
 exports.isSeller=(req,res,next)=>{
     try{
-        if (req.user.role!="Admin"){
+        console.log(req.user)
+        if (req.user.role!="seller"){
             return res.status(401).json({
                 success:false,
                 message:"you are not admin."
