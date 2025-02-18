@@ -2,7 +2,7 @@ const express=require("express")
 const router=express.Router()
 const {signup,login}=require("../controller/auth")
 const {auth,isBuyer,isSeller}=require("../middlewares/auth")
-const {getItemsController}=require('../controllers/itemControllers')
+const {getItemsController,addItemController}=require('../controllers/itemControllers')
 
 router.post("/signup",signup)
 router.post("/login",login)
