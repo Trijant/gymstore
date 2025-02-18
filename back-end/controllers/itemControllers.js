@@ -42,7 +42,8 @@ exports.getItemController = async (req, res) => {
 exports.addItemController = async (req, res) => {
     try {
         const { title, description, tag } = req.body
-        const file = req.files.file;
+        console.log(req.files.file)
+        const {file} = req.files;
 
         if (!title || !description || !tag || !file) {
             return res.status(400).json({
@@ -51,7 +52,7 @@ exports.addItemController = async (req, res) => {
             })
         }
 
-        const img = await fileUploadCloudinary(file)
+        const img = (await fileUploadCloudinary(file)).secure_url
 
         const dbResponse = await Item.create({ title, description, tag, img })
 
@@ -69,11 +70,79 @@ exports.addItemController = async (req, res) => {
         })
     }
     catch (error) {
-        console.error(error.message)
+        console.error(error)
         return res.status(500).json({
             success: false,
             message: "we got error while getting items."
         })
     }
+
+}
+
+
+exports.addToCartController=async (req,res)=>{
+try{
+    const {userId,itemId}=req.body
+    if (!id) {
+        return res.status(400).json({
+            success:false,
+            message:"please provide all the details."
+        })
+    }
+
+    const dbResponse=await User.findByIdAndUpdate(userId,{$push:{cart:itemId}})
+
+    if (!dbResponse) {
+        return res.status(500).json({
+            success:false,
+            message:"unable to add to cart."
+        })
+    }
+    return res.status(200).json({
+        success:true,
+        data:dbResponse,
+        message:"successfully added to cart."
+    })
+}
+catch (error) {
+    console.error(error.message)
+    return res.status(500).json({
+        success: false,
+        message: "we got error while adding to cart."
+    })
+}
+
+}
+exports.removeFromCartController=async (req,res)=>{
+try{
+    const {userId,itemId}=req.body
+    if (!id) {
+        return res.status(400).json({
+            success:false,
+            message:"please provide all the details."
+        })
+    }
+
+    const dbResponse=await User.findByIdAndUpdate(userId,{$pop:{cart:itemId}})
+
+    if (!dbResponse) {
+        return res.status(500).json({
+            success:false,
+            message:"unable to add to cart."
+        })
+    }
+    return res.status(200).json({
+        success:true,
+        data:dbResponse,
+        message:"successfully added to cart."
+    })
+}
+catch (error) {
+    console.error(error.message)
+    return res.status(500).json({
+        success: false,
+        message: "we got error while adding to cart."
+    })
+}
 
 }
