@@ -8,6 +8,9 @@ const port=process.env.PORT || 4000
 const connectDB=require("./config/database")
 connectDB()
 
+const cloudinary=require("./config/cloudinary")
+cloudinary.cloudinaryConnect() 
+
 app.use(express.json())
 app.use("/api/v1",router)
 
